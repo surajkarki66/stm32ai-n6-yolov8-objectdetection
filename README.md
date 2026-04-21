@@ -67,7 +67,7 @@ pip install -r requirements.txt
 
 ## Running
 
-### Option 1: Run All Steps with Pipeline (Recommended)
+### Option 1: Run All Steps with Pipeline
 
 > [!WARNING]
 >
@@ -91,7 +91,7 @@ The pipeline runs the following steps sequentially:
 
 ---
 
-### Option 2: Step-by-Step Manual Execution
+### Option 2: Step-by-Step Manual Execution (Recomended)
 
 #### Step 1: YOLOv8 Model Export
 
