@@ -31,62 +31,13 @@ from typing import Dict, List
 
 def check_submodule(c_project_path: str):
     """
-    Check if the project submodule is initialized in the C project path.
-
-    Args:
-        c_project_path (str): Path to the  C project.
+    Check if the C project path exists on disk.
     """
-    BOLD_YELLOW = "\033[1;33m"
-    BOLD_RED = "\033[1;31m"
-    RESET = "\033[0m"
-    from git import Repo, InvalidGitRepositoryError
-
-    # Get absolute path of the current script file
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-
-    # Initialize the git repo by searching parent directories from the script directory
-    try:
-        repo = Repo(script_dir, search_parent_directories=True)
-    except InvalidGitRepositoryError:
-        raise InvalidGitRepositoryError(f"No git repository found from path {script_dir}")
-
-    submodule_path = c_project_path.lstrip('./').rstrip("./")
-
-    # Find the submodule object by path
-    submodule = None
-    for sm in repo.submodules:
-        print(sm.path)
-        if sm.path == submodule_path:
-            submodule = sm
-            break
-
-    if submodule is None:
-        raise ValueError(f"Submodule '{submodule_path}' not found.")
-
-    # Check if submodule is initialized by trying to get its repo
-    try:
-        sub_repo = submodule.module()
-        initialized = True
-    except InvalidGitRepositoryError:
-        print(f"{RESET}{BOLD_RED}[ERROR]:{RESET} Submodule '{submodule_path}' is not initialized. Please run 'git submodule update --init {submodule_path}'.")
-        initialized = False
-        sub_repo = None
-        return False
-
-    if initialized:
-        # Commit recorded in main repo
-        main_commit = submodule.hexsha
-
-        # Current commit in submodule repo
-        current_commit = sub_repo.head.commit.hexsha
-        if main_commit != current_commit:
-            print(f"{RESET}{BOLD_RED}[ERROR]:{RESET} Submodule '{submodule_path}' is not at the expected commit.")
-            print(f"         Main repo expects commit {main_commit} but submodule is at commit {current_commit}.")
-            print(f"         Please run 'git submodule update --init {submodule_path}' to sync the submodule.")
-            return False
-        if sub_repo.is_dirty(untracked_files=True):
-            print(f"{RESET}{BOLD_YELLOW}[WARNING]:{RESET} Submodule '{submodule_path}' has uncommitted changes. Please commit or stash them.")
-            return True
+    if not os.path.isdir(c_project_path):
+        raise ValueError(
+            f"C project path '{c_project_path}' not found. "
+            f"Please clone STM32N6-GettingStarted-ObjectDetection there."
+        )
     return True
 
 def _keep_internal_weights(path_network_data_params: str):

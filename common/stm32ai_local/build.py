@@ -505,7 +505,7 @@ def cmd_build(
         session: STMAiSession,
         target: Optional[Union[STMAiBoardConfig, None]] = None,
         user_files: Union[str, List[str], Path, List[Path]] = '',
-        no_flash: bool = False,
+        no_flash: bool = True,
         **kwargs
 ):
     """Build service"""
